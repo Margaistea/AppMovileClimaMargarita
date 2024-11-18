@@ -15,12 +15,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.NavType
-import com.example.MargaritaBrunAppClima.Clima.WeatherScreen
+import com.example.MargaritaBrunAppClima.Clima.PantallaClima
 import com.example.MargaritaBrunAppClima.ui.theme.MargaritaBrunAppClimaTheme
 import com.example.MargaritaBrunAppClima.router.Enrutador
 import com.example.MargaritaBrunAppClima.router.Router
 import com.example.MargaritaBrunAppClima.router.Ruta
-import com.example.MargaritaBrunAppClima.screens.CityScreen
+import com.example.MargaritaBrunAppClima.screens.PantallaCuidad
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
         }
     }
     private fun initUI() {
-        val favoriteCity = UserPreferences.getFavoriteCity(this)
+        val favoriteCity = UserPreferences.GetCuidadesFavoritas(this)
 
         setContent {
             MargaritaBrunAppClimaTheme {
@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         composable(Ruta.Ciudades.id) {
-                            CityScreen(router, currentLatitude, currentLongitude)
+                            PantallaCuidad(router, currentLatitude, currentLongitude)
                         }
                         composable(
                             "clima_float?lat={lat}&lon={lon}&nombre={nombre}",
@@ -78,7 +78,7 @@ class MainActivity : ComponentActivity() {
                             val lat = backStackEntry.arguments?.getFloat("lat") ?: 0f
                             val lon = backStackEntry.arguments?.getFloat("lon") ?: 0f
                             val nombre = backStackEntry.arguments?.getString("nombre") ?: ""
-                            WeatherScreen(lat.toDouble(), lon.toDouble(), nombre, router)
+                            PantallaClima(lat.toDouble(), lon.toDouble(), nombre, router)
                         }
                         composable(
                             "clima_double?lat={lat}&lon={lon}&nombre={nombre}",
@@ -91,7 +91,7 @@ class MainActivity : ComponentActivity() {
                             val lat = backStackEntry.arguments?.getString("lat")?.toDoubleOrNull() ?: 0.0
                             val lon = backStackEntry.arguments?.getString("lon")?.toDoubleOrNull() ?: 0.0
                             val nombre = backStackEntry.arguments?.getString("nombre") ?: ""
-                            WeatherScreen(lat, lon, nombre, router)
+                            PantallaClima(lat, lon, nombre, router)
                         }
                     }
                 }

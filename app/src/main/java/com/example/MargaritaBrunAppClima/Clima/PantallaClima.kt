@@ -93,7 +93,7 @@ fun TemperatureChart(
 }
 val lightGray = Color(0xFFD3D3D3)
 @Composable
-fun WeatherScreen(lat: Double, lon: Double, cityName: String, router: Router) {
+fun PantallaClima(lat: Double, lon: Double, cityName: String, router: Router) {
     var currentWeather by remember { mutableStateOf<WeatherResponse?>(null) }
     var sevenDayForecast by remember { mutableStateOf<WeeklyForecastResponse?>(null) }
     var isLoading by remember { mutableStateOf(true) }
@@ -102,7 +102,7 @@ fun WeatherScreen(lat: Double, lon: Double, cityName: String, router: Router) {
     var isFavorite by remember { mutableStateOf(false) }
 
     LaunchedEffect(cityName) {
-        isFavorite = UserPreferences.getFavoriteCity(context) == cityName
+        isFavorite = UserPreferences.GetCuidadesFavoritas(context) == cityName
     }
 
     LaunchedEffect(lat, lon) {
@@ -241,7 +241,7 @@ fun WeatherScreen(lat: Double, lon: Double, cityName: String, router: Router) {
             if (isFavorite) {
                 Button(
                     onClick = {
-                        UserPreferences.clearFavoriteCity(context)
+                        UserPreferences.BorrarCuidadesFavoritas(context)
                         isFavorite = false
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = lightGray),
@@ -252,7 +252,7 @@ fun WeatherScreen(lat: Double, lon: Double, cityName: String, router: Router) {
             } else {
                 Button(
                     onClick = {
-                        UserPreferences.saveFavoriteCity(context, cityName)
+                        UserPreferences.CuidadesFavoritasGuardadas(context, cityName)
                         isFavorite = true
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = lightGray),

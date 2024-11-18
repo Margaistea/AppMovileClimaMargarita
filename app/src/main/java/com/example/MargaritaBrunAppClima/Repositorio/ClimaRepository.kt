@@ -26,31 +26,6 @@ object WeatherRepository {
             json()
         }
     }
-    suspend fun getCityCoordinates(city: String): Coord? {
-        Log.d("WeatherRepository", "Buscando coordenadas para la ciudad: $city")
-        return withContext(Dispatchers.IO) {
-            try {
-                val response: HttpResponse = clientV2.get("https://api.openweathermap.org/data/2.5/weather") {
-                    parameter("q", city)
-                    parameter("appid", ApiConfig.apiKey)
-                }
-
-                if (response.status.value == 200) {
-                    val responseBody: String = response.bodyAsText()
-                    Log.d("WeatherRepository", "Response: $responseBody")
-                    val cityCoordinates = Json.decodeFromString<CityCoordinates>(responseBody)
-
-                    return@withContext cityCoordinates.coord
-                } else {
-                    Log.e("WeatherRepository", "Error: ${response.status.value}")
-                    return@withContext null
-                }
-            } catch (e: Exception) {
-                Log.e("WeatherRepository", "Error al obtener el clima: ${e.message}")
-                return@withContext null
-            }
-        }
-    }
     suspend fun fetchSevenDayForecast(lat: Double, lon: Double): WeeklyForecastResponse? {
         return withContext(Dispatchers.IO) {
             try {

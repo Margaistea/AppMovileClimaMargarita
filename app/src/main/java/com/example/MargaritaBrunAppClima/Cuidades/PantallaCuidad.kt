@@ -31,7 +31,7 @@ import com.example.MargaritaBrunAppClima.ApiConfig
 import com.example.MargaritaBrunAppClima.Clima.lightGray
 
 @Composable
-fun CityScreen(router: Router, latitude: Double?, longitude: Double?) {
+fun PantallaCuidad(router: Router, latitude: Double?, longitude: Double?) {
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
     var cities by remember { mutableStateOf<List<City>>(emptyList()) }
     var isLoading by remember { mutableStateOf(false) }
@@ -47,7 +47,7 @@ fun CityScreen(router: Router, latitude: Double?, longitude: Double?) {
         City(name = "El Cairo", coord = Coord(30.0444f, 31.2357f))
     )
 
-    fun searchCities(query: String, showError: Boolean = false) {
+    fun BuscarCuidades(query: String, showError: Boolean = false) {
         if (query.isNotEmpty()) {
             isLoading = true
             errorMessage = null
@@ -70,21 +70,6 @@ fun CityScreen(router: Router, latitude: Double?, longitude: Double?) {
         }
     }
 
-    fun searchCitiesByCoordinates(lat: Double, lon: Double) {
-        isLoading = true
-        coroutineScope.launch {
-            try {
-                val response = RetrofitClient.weatherServiceV2.searchWeatherByCoordinates(lat, lon, ApiConfig.apiKey)
-                cities = listOf(City(name = response.name, coord = Coord(lat = lat.toFloat(), lon = lon.toFloat())))
-                errorMessage = null
-            } catch (e: Exception) {
-                errorMessage = "Error al buscar la ubicación."
-            } finally {
-                isLoading = false
-            }
-        }
-    }
-
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -93,7 +78,7 @@ fun CityScreen(router: Router, latitude: Double?, longitude: Double?) {
             value = searchQuery,
             onValueChange = {
                 searchQuery = it
-                searchCities(searchQuery.text)
+                BuscarCuidades(searchQuery.text)
                 showNoResultsError = false
             },
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
@@ -107,27 +92,12 @@ fun CityScreen(router: Router, latitude: Double?, longitude: Double?) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Button(
-                onClick = { searchCities(searchQuery.text, showError = true) },
+                onClick = { BuscarCuidades(searchQuery.text, showError = true) },
                 colors = ButtonDefaults.buttonColors(containerColor = lightGray),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Buscar")
             }
-
-            Button(
-                onClick = {
-                    latitude?.let { lat ->
-                        longitude?.let { lon ->
-                            searchCitiesByCoordinates(lat, lon)
-                        } ?: run { errorMessage = "Coordenadas no disponibles." }
-                    } ?: run { errorMessage = "Coordenadas no disponibles." }
-                },
-                colors = ButtonDefaults.buttonColors(containerColor = lightGray),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Usar ubicación")
-            }
-        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -138,7 +108,7 @@ fun CityScreen(router: Router, latitude: Double?, longitude: Double?) {
             ) {
                 Text(
                     text = it,
-                    color = Color(0xFFD32F2F),
+                    color = Color(0xFFB68B8B),
                     modifier = Modifier.padding(16.dp),
                     style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 )
@@ -183,9 +153,11 @@ fun CityScreen(router: Router, latitude: Double?, longitude: Double?) {
                     }
                 }
             }
+         }
         }
     }
 }
+
 
 
 
